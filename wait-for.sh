@@ -75,7 +75,7 @@ wait_for() {
     esac
 
     result=$?
-
+        
     if [ $result -eq 0 ] ; then
       if [ $# -gt 7 ] ; then
         for result in $(seq $(($# - 7))); do
