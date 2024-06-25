@@ -1,3 +1,5 @@
+DB_URL=postgresql://root:secret@localhost:5432/transactions?sslmode=disable
+
 postgres:
 	docker run --name postgres12 --network test-network -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:12-alpine
 
@@ -8,16 +10,16 @@ dropdb:
 	docker exec -it postgres12 dropdb transactions
 
 migrateup:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/transactions?sslmode=disable" -verbose up
+	migrate -path db/migration -database "$(DB_URL)" -verbose up
 
 migrateup1:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/transactions?sslmode=disable" -verbose up 1
+	migrate -path db/migration -database "$(DB_URL)" -verbose up 1
 
 migratedown:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/transactions?sslmode=disable" -verbose down
+	migrate -path db/migration -database "$(DB_URL)" -verbose down
 
 migratedown1:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/transactions?sslmode=disable" -verbose down 1
+	migrate -path db/migration -database "$(DB_URL)" -verbose down 1
 
 sqlc:
 	sqlc generate
@@ -31,4 +33,10 @@ server:
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/sheel-ui/transactions-api/db/sqlc Store
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc test server mock migratedown1 migrateup1
+dbdocs:
+	dbdocs build docs/db.dbml
+
+dbschema:
+	dbml2sql --postgres -o docs/schema.sql docs/db.dbml
+
+.PHONY: postgres createdb dropdb migrateup migratedown sqlc test server mock migratedown1 migrateup1 dbdocs dbschema
