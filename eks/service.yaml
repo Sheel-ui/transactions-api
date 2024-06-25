@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: transactions-api-service
+spec:
+  selector:
+    app: transactions-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+  # change type to ClusterIP when using ingress
+  # type: ClusterIP
