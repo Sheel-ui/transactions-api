@@ -1,13 +1,13 @@
 DB_URL=postgresql://root:secret@localhost:5432/transactions?sslmode=disable
 
 postgres:
-	docker run --name postgres12 --network test-network -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:12-alpine
+	docker run --name postgres --network test-network -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:12-alpine
 
 createdb:
-	docker exec -it postgres12 createdb --username=root --owner=root transactions
+	docker exec -it postgres createdb --username=root --owner=root transactions
 
 dropdb:
-	docker exec -it postgres12 dropdb transactions
+	docker exec -it postgres dropdb transactions
 
 migrateup:
 	migrate -path db/migration -database "$(DB_URL)" -verbose up

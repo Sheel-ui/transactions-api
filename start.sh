@@ -2,10 +2,6 @@
 
 set -e
 
-echo "run db migration"
-source /app/app.env
-DB_SOURCE_CLEAN=$(echo $DB_SOURCE | tr -d '\r')
-/app/migrate -path /app/migration -database "$DB_SOURCE_CLEAN" -verbose up
-
 echo "start the app"
+
 exec "$@"
