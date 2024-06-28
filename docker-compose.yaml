@@ -2,6 +2,8 @@ version: "3.9"
 services:
   postgres:
     image: postgres:12-alpine
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=secret
@@ -12,6 +14,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+      - "9090:9090"
     environment:
       - DB_SOURCE=postgresql://root:secret@postgres:5432/transactions?sslmode=disable
     depends_on:
@@ -23,5 +26,4 @@ services:
         "--",
         "/app/start.sh"
       ]
-    links:
-      - postgres
+    command: [ "/app/main" ]
