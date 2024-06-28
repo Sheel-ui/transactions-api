@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	TransactionsApi_CreateUser_FullMethodName = "/pb.TransactionsApi/CreateUser"
-	TransactionsApi_UpdateUser_FullMethodName = "/pb.TransactionsApi/UpdateUser"
-	TransactionsApi_LoginUser_FullMethodName  = "/pb.TransactionsApi/LoginUser"
+	TransactionsApi_CreateUser_FullMethodName  = "/pb.TransactionsApi/CreateUser"
+	TransactionsApi_UpdateUser_FullMethodName  = "/pb.TransactionsApi/UpdateUser"
+	TransactionsApi_LoginUser_FullMethodName   = "/pb.TransactionsApi/LoginUser"
+	TransactionsApi_VerifyEmail_FullMethodName = "/pb.TransactionsApi/VerifyEmail"
 )
 
 // TransactionsApiClient is the client API for TransactionsApi service.
@@ -31,6 +32,7 @@ type TransactionsApiClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
 	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error)
+	VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error)
 }
 
 type transactionsApiClient struct {
@@ -71,6 +73,16 @@ func (c *transactionsApiClient) LoginUser(ctx context.Context, in *LoginUserRequ
 	return out, nil
 }
 
+func (c *transactionsApiClient) VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(VerifyEmailResponse)
+	err := c.cc.Invoke(ctx, TransactionsApi_VerifyEmail_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TransactionsApiServer is the server API for TransactionsApi service.
 // All implementations must embed UnimplementedTransactionsApiServer
 // for forward compatibility
@@ -78,6 +90,7 @@ type TransactionsApiServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
 	LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error)
+	VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error)
 	mustEmbedUnimplementedTransactionsApiServer()
 }
 
@@ -93,6 +106,9 @@ func (UnimplementedTransactionsApiServer) UpdateUser(context.Context, *UpdateUse
 }
 func (UnimplementedTransactionsApiServer) LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
+}
+func (UnimplementedTransactionsApiServer) VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyEmail not implemented")
 }
 func (UnimplementedTransactionsApiServer) mustEmbedUnimplementedTransactionsApiServer() {}
 
@@ -161,6 +177,24 @@ func _TransactionsApi_LoginUser_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TransactionsApi_VerifyEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TransactionsApiServer).VerifyEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TransactionsApi_VerifyEmail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TransactionsApiServer).VerifyEmail(ctx, req.(*VerifyEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TransactionsApi_ServiceDesc is the grpc.ServiceDesc for TransactionsApi service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -179,6 +213,10 @@ var TransactionsApi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoginUser",
 			Handler:    _TransactionsApi_LoginUser_Handler,
+		},
+		{
+			MethodName: "VerifyEmail",
+			Handler:    _TransactionsApi_VerifyEmail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
