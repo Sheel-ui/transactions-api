@@ -35,6 +35,7 @@ server:
 
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/sheel-ui/transactions-api/db/sqlc Store
+	mockgen -package mockwk -destination worker/mock/distributor.go github.com/sheel-ui/transactions-api/worker TaskDistributor
 
 dbdocs:
 	dbdocs build docs/db.dbml
