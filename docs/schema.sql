@@ -1,6 +1,6 @@
 -- SQL dump generated using DBML (dbml.dbdiagram.io)
 -- Database: PostgreSQL
--- Generated at: 2024-06-28T12:41:02.005Z
+-- Generated at: 2024-06-28T19:23:26.009Z
 
 CREATE TABLE "accounts" (
   "id" BIGSERIAL PRIMARY KEY,
@@ -27,6 +27,7 @@ CREATE TABLE "transfers" (
 
 CREATE TABLE "users" (
   "username" varchar PRIMARY KEY,
+  "role" varchar NOT NULL DEFAULT 'depositor',
   "hashed_password" varchar NOT NULL,
   "full_name" varchar NOT NULL,
   "email" varchar UNIQUE NOT NULL,
