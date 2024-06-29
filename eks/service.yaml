@@ -8,7 +8,12 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: http-server
+      name: http-service
+    - protocol: TCP
+      port: 90
+      targetPort: grpc-server
+      name: grpc-service
   type: LoadBalancer
   # change type to ClusterIP when using ingress
   # type: ClusterIP
