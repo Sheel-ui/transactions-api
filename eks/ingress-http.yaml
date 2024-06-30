@@ -1,14 +1,7 @@
 apiVersion: networking.k8s.io/v1
-kind: IngressClass
-metadata:
-  name: nginx
-spec:
-  controller: k8s.io/ingress-nginx
----
-apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: transactions-ingress
+  name: transactions-ingress-http
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
@@ -21,7 +14,7 @@ spec:
         path: "/"
         backend:
           service:
-            name: transactions-api-service
+            name: transactions-service
             port:
               number: 80
   tls:
